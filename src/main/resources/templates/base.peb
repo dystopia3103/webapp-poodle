@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Poodle</title>
+    <link rel="stylesheet" href="/styles.css"> <!-- Add your styles -->
+</head>
+<body>
+    <header>
+        <nav>
+           <p>navigation</p>
+        </nav>
+    </header>
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+    <footer>
+        <p>© 2024 My Website</p>
+    </footer>
+</body>
+</html>

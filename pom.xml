@@ -97,9 +97,7 @@
 					</args>
 					<compilerPlugins>
 						<plugin>spring</plugin>
-						<compilerPlugins>
-							<plugin>jpa</plugin>
-						</compilerPlugins>
+						<plugin>jpa</plugin>
 					</compilerPlugins>
 				</configuration>
 				<dependencies>

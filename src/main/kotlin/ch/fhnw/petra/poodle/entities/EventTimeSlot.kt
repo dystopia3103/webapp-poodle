@@ -3,18 +3,20 @@ package ch.fhnw.petra.poodle.entities
 import jakarta.persistence.*
 import java.time.Instant
 
+@Entity
+@Table(name = "event_time_slot")
 data class EventTimeSlot(
     @Id
-    @GeneratedValue
-    private val id: Int? = null,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "start_time")
     val start: Instant,
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "end_time")
     val end: Instant,
 
-    @Column(nullable = false)
+    @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    private val event: Event
+    val event: Event? = null
 )

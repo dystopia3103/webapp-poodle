@@ -3,22 +3,23 @@ package ch.fhnw.petra.poodle.entities
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "participation")
 data class Participation(
     @Id
-    @GeneratedValue
-    private val id: Int? = null,
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Int? = null,
 
-    @Column(nullable = false)
-    private val participantName: String,
+    @Column(nullable = false, name = "participant_name")
+    val participantName: String,
 
-    @Column(nullable = false)
+    @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    private val event: Event,
+    val event: Event,
 
     @OneToMany(cascade = [CascadeType.ALL])
-    private val votes: List<Vote>? = null,
+    val votes: List<Vote>? = null,
 
-    @Column(nullable = false)
+    @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    private val meeting: Meeting,
+    val meeting: Meeting,
 )
