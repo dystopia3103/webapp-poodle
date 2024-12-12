@@ -1,6 +1,8 @@
     {% extends "base" %}
 
     {% block main %}
+<script src="/js/eventForm.js"></script>
+
 <h2>Plan your event</h2>
 <form action="/events/save/{{ event.id }}" method="post">
 	<input type="text" name="name" required placeholder="Title of your event"
@@ -12,6 +14,12 @@
 
     <input type="text" name="link" readonly value="{{ event.link }}">
 
+    <div id="time-slots" data-timeslots="{{ timeSlotsJson }}">
+    </div>
+    <button type="button" onclick="addTimeSlotNode()">Add timeslot</button>
+    <button type="button" onclick="removeTimeSlotNode()">Remove</button>
 	<input type="submit" value="Save" class="button">
 </form>
+
+<script>initForm()</script>
     {% endblock %}

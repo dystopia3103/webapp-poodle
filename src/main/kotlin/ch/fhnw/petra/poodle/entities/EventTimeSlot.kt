@@ -16,7 +16,7 @@ data class EventTimeSlot(
     @Column(nullable = false, name = "end_time")
     var end: Instant? = null,
 
-    @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "event_id")
     var event: Event? = null
 )

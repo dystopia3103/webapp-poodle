@@ -3,7 +3,9 @@
     {% block main %}
 <ul>
     {% for event in events %}
-        <li>{{ event.name }}</li>
+        <li>
+            {{ event.name }} | {{ event.description }} | {{ event.link }}
+        </li>
     {% endfor %}
 </ul>
 {% endblock %}
