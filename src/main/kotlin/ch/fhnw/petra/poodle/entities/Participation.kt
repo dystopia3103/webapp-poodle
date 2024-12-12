@@ -7,19 +7,19 @@ import jakarta.persistence.*
 data class Participation(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    var id: Int = 0,
 
     @Column(nullable = false, name = "participant_name")
-    val participantName: String,
+    var participantName: String = "",
 
     @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    val event: Event,
+    var event: Event? = null,
 
     @OneToMany(cascade = [CascadeType.ALL])
-    val votes: List<Vote>? = null,
+    var votes: MutableList<Vote> = mutableListOf(),
 
     @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    val meeting: Meeting,
+    var meeting: Meeting? = null,
 )

@@ -7,11 +7,15 @@ import org.springframework.stereotype.Service
 @Service
 class EventService(private val eventRepo: EventRepository) {
 
+    fun find(id: Int): Event {
+        return eventRepo.findById(id).orElseThrow()
+    }
+
     fun findAll(): List<Event> {
         return eventRepo.findAll()
     }
 
-    fun add(event: Event) {
+    fun save(event: Event) {
         eventRepo.save(event)
     }
 

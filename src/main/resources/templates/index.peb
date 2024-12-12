@@ -1,5 +1,9 @@
-{% extends "base" %}
+    {% extends "base" %}
 
-{% block main %}
-<h3>{{ event.name }}</h3>
+    {% block main %}
+<ul>
+    {% for event in events %}
+        <li>{{ event.name }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}

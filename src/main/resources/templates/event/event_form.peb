@@ -1,0 +1,17 @@
+    {% extends "base" %}
+
+    {% block main %}
+<h2>Plan your event</h2>
+<form action="/events/save/{{ event.id }}" method="post">
+	<input type="text" name="name" required placeholder="Title of your event"
+    {% if event.name is defined %} value="{{ event.name }}"{% endif %}>
+
+    <textarea name="description" rows="4" cols="50">
+        {% if event.description is defined %}{{ event.description }}{% endif %}
+    </textarea>
+
+    <input type="text" name="link" readonly value="{{ event.link }}">
+
+	<input type="submit" value="Save" class="button">
+</form>
+    {% endblock %}

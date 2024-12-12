@@ -1,24 +1,27 @@
 package ch.fhnw.petra.poodle.entities
 
 import jakarta.persistence.*
+import java.util.*
 
 @Entity
 @Table(name = "event")
 data class Event(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    @GeneratedValue
+    var id: Int = 0,
 
-    @Column(nullable = false,)
-    val link: String,
+    @Column(nullable = false, unique = true)
+    val link: String = UUID.randomUUID().toString(),
 
     @Column(nullable = false)
-    val name: String,
+    var name: String = "",
 
-    @PrimaryKeyJoinColumn
-    @OneToOne(cascade = [CascadeType.ALL])
-    val timeSlot: EventTimeSlot,
+    @Column(nullable = false)
+    var description: String = "",
+
+    @ElementCollection
+    var participantEmails: MutableList<String> = mutableListOf(),
 
     @OneToMany(cascade = [CascadeType.ALL])
-    val participations: List<Participation>? = null
+    var participations: MutableList<Participation> = mutableListOf(),
 )

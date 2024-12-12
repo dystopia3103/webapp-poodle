@@ -7,13 +7,13 @@ import jakarta.persistence.*
 data class Vote(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    var id: Int = 0,
 
     @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    val participation: Participation,
+    var participation: Participation? = null,
 
     @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    val timeSlot: EventTimeSlot,
+    var timeSlot: EventTimeSlot? = null,
 )

@@ -8,15 +8,15 @@ import java.time.Instant
 data class EventTimeSlot(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    var id: Int = 0,
 
     @Column(nullable = false, name = "start_time")
-    val start: Instant,
+    var start: Instant? = null,
 
     @Column(nullable = false, name = "end_time")
-    val end: Instant,
+    var end: Instant? = null,
 
     @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
-    val event: Event? = null
+    var event: Event? = null
 )
