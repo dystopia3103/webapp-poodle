@@ -11,9 +11,9 @@ function initForm() {
 
 function addTimeSlotNode() {
     let inputs = `
-        <input type="date" name="timeSlots[${timeSlotIndex}].date" placeholder="Pick a date" required>
-        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" placeholder="Start time" required>
-        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" placeholder="End time" required>
+        <input type="date" name="timeSlots[${timeSlotIndex}].date" placeholder="Pick a date">
+        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" placeholder="Start time">
+        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" placeholder="End time">
     `;
     let node = document.createElement('div')
     node.id = `time-slot-${timeSlotIndex}`;

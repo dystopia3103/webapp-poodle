@@ -4,8 +4,18 @@
 <script src="/js/eventForm.js"></script>
 
 <h2>Plan your event</h2>
+
+{% if validationErrors is defined %}
+    <strong>Please correct the following errors</strong>
+    <ul>
+    {% for error in validationErrors %}
+        <li>{{ error.defaultMessage }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
 <form action="/events/save/{{ event.id }}" method="post">
-	<input type="text" name="name" required placeholder="Title of your event"
+	<input type="text" name="name" placeholder="Title of your event"
     {% if event.name is defined %} value="{{ event.name }}"{% endif %}>
 
     <textarea name="description" rows="4" cols="50">
