@@ -14,22 +14,22 @@
     </ul>
 {% endif %}
 
-<form action="/events/save/{{ event.id }}" method="post">
+<form action="/events/save/{{ eventId }}" method="post">
 	<input type="text" name="name" placeholder="Title of your event"
-    {% if event.name is defined %} value="{{ event.name }}"{% endif %}>
+    {% if eventForm.name is defined %} value="{{ eventForm.name }}"{% endif %}>
 
     <textarea name="description" rows="4" cols="50">
-        {% if event.description is defined %}{{ event.description }}{% endif %}
+        {% if eventForm.description is defined %}{{ eventForm.description }}{% endif %}
     </textarea>
 
-    <input type="text" name="link" readonly value="{{ event.link }}">
-
-    <div id="time-slots" data-timeslots="{{ timeSlotsJson }}">
-    </div>
+    <div id="time-slots"></div>
     <button type="button" onclick="addTimeSlotNode()">Add timeslot</button>
     <button type="button" onclick="removeTimeSlotNode()">Remove</button>
+
+    <div id="participant-emails"></div>
+    <button type="button" onclick="addParticipantNode()">Add Participant</button>
+    <button type="button" onclick="removeParticipantNode()">Remove</button>
+
 	<input type="submit" value="Save" class="button">
 </form>
-
-<script>initForm()</script>
     {% endblock %}

@@ -1,4 +1,5 @@
-var timeSlotIndex = 0
+var timeSlotIndex = 0;
+var participantIndex = 0;
 
 function initForm() {
     let jsonString = document.getElementById('time-slots').dataset.timeslots
@@ -6,7 +7,10 @@ function initForm() {
         let slotsArr = JSON.parse(jsonString);
         console.log(slotsArr);
     }
+
+    // if no previous existing data
     addTimeSlotNode();
+    addParticipantNode();
 }
 
 function addTimeSlotNode() {
@@ -27,3 +31,20 @@ function removeTimeSlotNode() {
     document.getElementById('time-slots').lastElementChild.remove();
     timeSlotIndex--;
 }
+
+function addParticipantNode() {
+    let node = document.createElement('input');
+    node.name = `participantEmails[${participantIndex}]`;
+    node.placeholder = 'Participant email';
+    document.getElementById('participant-emails').appendChild(node)
+    participantIndex++;
+}
+
+function removeParticipantNode() {
+    document.getElementById('participant-emails').lastElementChild.remove();
+    participantIndex--;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initForm();
+});

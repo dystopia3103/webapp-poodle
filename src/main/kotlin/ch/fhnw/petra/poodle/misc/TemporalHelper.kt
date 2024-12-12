@@ -12,5 +12,15 @@ class TemporalHelper {
             val localDateTime = LocalDateTime.parse("$date $time", formatter)
             return localDateTime.toInstant(ZoneOffset.UTC)
         }
+
+        fun dateStringFromInstant(instant: Instant): String {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            return LocalDateTime.ofInstant(instant, ZoneOffset.UTC).format(formatter)
+        }
+
+        fun timeStringFromInstant(instant: Instant): String {
+            val formatter = DateTimeFormatter.ofPattern("HH:mm")
+            return LocalDateTime.ofInstant(instant, ZoneOffset.UTC).format(formatter)
+        }
     }
 }

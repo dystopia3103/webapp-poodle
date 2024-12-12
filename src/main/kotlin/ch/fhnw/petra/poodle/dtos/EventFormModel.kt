@@ -1,6 +1,7 @@
 package ch.fhnw.petra.poodle.dtos
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 import jakarta.validation.constraints.Pattern
@@ -15,6 +16,10 @@ data class EventFormModel(
     @field:NotEmpty(message = "At least one time slot must be given")
     @field:Valid
     var timeSlots: MutableList<TimeSlotFormModel> = mutableListOf(),
+
+    @field:NotEmpty(message = "At least one participant must be given")
+    @field:Valid
+    var participants: MutableList<@Email(message = "Each participant must be a valid email address") String> = mutableListOf(),
 )
 
 data class TimeSlotFormModel(

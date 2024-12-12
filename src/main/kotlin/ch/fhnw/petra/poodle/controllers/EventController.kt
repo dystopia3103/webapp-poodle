@@ -1,6 +1,7 @@
 package ch.fhnw.petra.poodle.controllers
 
 import ch.fhnw.petra.poodle.dtos.EventFormModel
+import ch.fhnw.petra.poodle.dtos.TimeSlotFormModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper
@@ -20,15 +21,30 @@ class EventController(private val eventService: EventService, private val object
 
     @GetMapping("/events/create")
     fun eventCreateForm(model: Model): String {
-        val newEvent = Event(name = "", description = "");
-        model.addAttribute("event", newEvent)
+        val newEvent = EventFormModel()
+        model.addAttribute("eventForm", newEvent)
+        model.addAttribute("eventId", 0)
         return "event/event_form"
     }
 
     @GetMapping("/events/update/{id}")
     fun eventUpdateForm(@PathVariable id: Int, model: Model): String {
         val event = eventService.find(id)
-        model.addAttribute("event", event)
+        val form = EventFormModel(
+            name = event.name,
+            description = event.description,
+            timeSlots = event.timeSlots.map {
+                TimeSlotFormModel(
+                    TemporalHelper.dateStringFromInstant(it.start!!),
+                    TemporalHelper.timeStringFromInstant(it.start!!),
+                    TemporalHelper.timeStringFromInstant(it.end!!)
+                )
+            }.toMutableList(),
+            participants = event.participantEmails
+        )
+
+        model.addAttribute("eventForm", form)
+        model.addAttribute("eventId", id)
         //todo: Updating time slots?
         return "event/event_form"
     }
@@ -40,15 +56,18 @@ class EventController(private val eventService: EventService, private val object
         bindingResult: BindingResult,
         model: Model,
     ): String {
-
-        val existingEvent = if (id != 0) eventService.find(id) else Event()
-        val updatedEvent = existingEvent.copy(name = eventForm.name, description = eventForm.description)
-
         if (bindingResult.hasErrors()) {
-            model.addAttribute("event", updatedEvent)
+            model.addAttribute("eventForm", eventForm)
             model.addAttribute("validationErrors", bindingResult.allErrors)
             return "event/event_form"
         }
+
+        val existingEvent = if (id != 0) eventService.find(id) else Event()
+        val updatedEvent = existingEvent.copy(
+            name = eventForm.name,
+            description = eventForm.description,
+            participantEmails = eventForm.participants
+        )
 
         updatedEvent.timeSlots.clear()
         eventForm.timeSlots.forEach {
