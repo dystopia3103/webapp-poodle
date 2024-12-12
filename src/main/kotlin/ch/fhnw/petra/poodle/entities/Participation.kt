@@ -18,8 +18,4 @@ data class Participation(
 
     @OneToMany(cascade = [CascadeType.ALL])
     var votes: MutableList<Vote> = mutableListOf(),
-
-    @JoinColumn
-    @ManyToOne(cascade = [CascadeType.ALL])
-    var meeting: Meeting? = null,
 )
