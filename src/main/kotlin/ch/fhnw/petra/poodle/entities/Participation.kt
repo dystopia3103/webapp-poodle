@@ -12,8 +12,8 @@ data class Participation(
     @Column(nullable = false, name = "participant_name")
     var participantName: String = "",
 
-    @JoinColumn
     @ManyToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "event_id")
     var event: Event? = null,
 
     @OneToMany(cascade = [CascadeType.ALL])

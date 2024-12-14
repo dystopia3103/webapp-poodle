@@ -1,7 +1,6 @@
 package ch.fhnw.petra.poodle.dtos
 
 import ch.fhnw.petra.poodle.entities.Event
-import ch.fhnw.petra.poodle.misc.TemporalHelper
 
 data class EventViewModel(
     val name: String,
@@ -15,13 +14,7 @@ data class EventViewModel(
                 name = event.name,
                 link = event.link,
                 description = event.description,
-                timeSlots = event.timeSlots.map {
-                    EventTimeSlotViewModel(
-                        id = it.id,
-                        from = TemporalHelper.dateTimeStringFromInstant(it.start!!),
-                        to = TemporalHelper.dateTimeStringFromInstant(it.end!!)
-                    )
-                }
+                timeSlots = event.timeSlots.map { EventTimeSlotViewModel.fromEventTimeSlot(it) }
             )
         }
     }

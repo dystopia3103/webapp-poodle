@@ -23,9 +23,9 @@ function initTimeSlots() {
 
 function addTimeSlotNode(date = null, startTime = null, endTime = null) {
     let inputs = `
-        <input type="date" name="timeSlots[${timeSlotIndex}].date" placeholder="Pick a date" value="${date}">
-        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" placeholder="Start time" value="${startTime}">
-        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" placeholder="End time" value="${endTime}">
+        <input type="date" name="timeSlots[${timeSlotIndex}].date" value="${date}">
+        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" value="${startTime}">
+        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" value="${endTime}">
     `;
     let node = document.createElement('div')
     node.id = `time-slot-${timeSlotIndex}`;
@@ -58,7 +58,7 @@ function initParticipants() {
 function addParticipantNode(email = null) {
     let node = document.createElement('input');
     node.name = `participantEmails[${participantIndex}]`;
-    node.placeholder = 'Participant email';
+    node.placeholder = 'example@mail.com';
     node.value = email;
     document.getElementById('participant-emails').appendChild(node)
     participantIndex++;

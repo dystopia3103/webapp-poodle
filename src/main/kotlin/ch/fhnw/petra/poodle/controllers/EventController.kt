@@ -1,13 +1,11 @@
 package ch.fhnw.petra.poodle.controllers
 
-import ch.fhnw.petra.poodle.dtos.EventFormModel
-import ch.fhnw.petra.poodle.dtos.EventViewModel
-import ch.fhnw.petra.poodle.dtos.ParticipationViewModel
-import ch.fhnw.petra.poodle.dtos.TimeSlotFormModel
+import ch.fhnw.petra.poodle.dtos.*
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper
 import ch.fhnw.petra.poodle.services.EventService
+import ch.fhnw.petra.poodle.services.ParticipationService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -21,10 +19,27 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
-class EventController(private val eventService: EventService, private val objectMapper: ObjectMapper) {
+class EventController(private val eventService: EventService, private val participationService: ParticipationService) {
 
     @GetMapping("/event/{link}")
     fun eventDetail(@PathVariable link: String, model: Model): String {
+        return eventDetailCommon(link, model, "event/event_detail")
+    }
+
+    @GetMapping("/event/admin/{link}")
+    fun eventDetailAdmin(@PathVariable link: String, model: Model): String {
+        val participations = participationService.findByEventLink(link)
+        val allVotes = participations.flatMap { p -> p.votes }
+        val timeSlotCounts = allVotes.groupBy { it.timeSlot }.mapValues { it.value.size }
+        val bestSlot = timeSlotCounts.maxByOrNull { it.value }?.key
+
+        val viewModel = if (bestSlot == null) null else EventTimeSlotViewModel.fromEventTimeSlot(bestSlot)
+        model.addAttribute("bestTimeSlot", viewModel)
+
+        return eventDetailCommon(link, model, "event/event_detail_admin")
+    }
+
+    private fun eventDetailCommon(link: String, model: Model, viewName: String): String {
         val event = try {
             eventService.find(link)
         } catch (e: NoSuchElementException) {
@@ -43,7 +58,7 @@ class EventController(private val eventService: EventService, private val object
 
         model.addAttribute("event", eventViewModel)
         model.addAttribute("participations", participationViewModels)
-        return "event/event_detail"
+        return viewName
     }
 
     @GetMapping("/events/create")
@@ -111,7 +126,15 @@ class EventController(private val eventService: EventService, private val object
         }
 
         eventService.save(updatedEvent)
-        return "redirect:/"
+        return "redirect:/event/" + updatedEvent.link
+    }
+
+    private fun fetchEvent(eventLink: String): Event {
+        return try {
+            eventService.find(eventLink)
+        } catch (e: NoSuchElementException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+        }
     }
 
 }

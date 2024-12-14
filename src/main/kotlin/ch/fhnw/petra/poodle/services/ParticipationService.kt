@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service
 @Service
 class ParticipationService(private val participationRepo: ParticipationRepository) {
 
-    fun findAll(): List<Participation> {
-        return participationRepo.findAll()
+    fun findByEventLink(link: String): List<Participation> {
+        return participationRepo.findByEventLink(link)
     }
 
     fun save(participation: Participation) {

@@ -62,6 +62,7 @@ class ParticipationController(
 
         val participation = Participation(
             participantName = participationForm.participantName,
+            event = event,
         )
         participationForm.participations.forEach {
             if (it.timeSlotId != -1) {

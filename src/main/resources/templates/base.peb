@@ -7,14 +7,13 @@
 <body>
     <header>
         <nav>
-           <p>navigation</p>
+            <a href="{{ href("/") }}">
+                <img id="logo" src="/images/poodle.jpg" alt="Poodle Logo"/>
+            </a>
         </nav>
     </header>
     <main>
         {% block main %}{% endblock %}
     </main>
-    <footer>
-        <p>© 2024 My Website</p>
-    </footer>
 </body>
 </html>

@@ -8,13 +8,13 @@ import java.time.format.DateTimeFormatter
 class TemporalHelper {
     companion object {
         fun instantFromDateTimeString(date: String, time: String): Instant {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
             val localDateTime = LocalDateTime.parse("$date $time", formatter)
             return localDateTime.toInstant(ZoneOffset.UTC)
         }
 
         fun dateStringFromInstant(instant: Instant): String {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
             return LocalDateTime.ofInstant(instant, ZoneOffset.UTC).format(formatter)
         }
 
@@ -24,7 +24,7 @@ class TemporalHelper {
         }
 
         fun dateTimeStringFromInstant(instant: Instant): String {
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
             return LocalDateTime.ofInstant(instant, ZoneOffset.UTC).format(formatter)
         }
     }

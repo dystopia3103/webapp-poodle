@@ -2,8 +2,8 @@
         {% extends "base" %}
 
     {% block main %}
-<h2>{{ event.name }}</h2>
-<p>{{ event.description }}</p>
+<h2 class="headline m-top">{{ event.name }}</h2>
+<p class="text-center m-top">{{ event.description }}</p>
 
 {{ validationSummary(validationErrors) }}
 

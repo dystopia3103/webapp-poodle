@@ -1,11 +1,9 @@
     {% extends "base" %}
 
     {% block main %}
-<ul>
-    {% for event in events %}
-        <li>
-            {{ event.name }} | {{ event.description }} | {{ event.link }}
-        </li>
-    {% endfor %}
-</ul>
+    <div class="button-container">
+        <h2 class="headline">Start an Event Poll</h2>
+        <a href="{{ href("/events/create") }}" class="button">Create event</a>
+    </div>
+
 {% endblock %}

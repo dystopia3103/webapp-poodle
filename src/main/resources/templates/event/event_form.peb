@@ -4,7 +4,7 @@
     {% block main %}
 <script src="/js/eventForm.js"></script>
 
-<h2>Plan your event</h2>
+<h2 class="headline m-top">Plan your event</h2>
 
 {{ validationSummary(validationErrors) }}
 
@@ -12,18 +12,26 @@
 	<input type="text" name="name" placeholder="Title of your event"
     {% if eventForm.name is defined %} value="{{ eventForm.name }}"{% endif %}>
 
-    <textarea name="description" rows="4" cols="50">
+    <textarea name="description" rows="4" cols="50" placeholder="Further information">
         {% if eventForm.description is defined %}{{ eventForm.description }}{% endif %}
     </textarea>
 
+    <h3 class="m-top">Choose time slots for voting</h3>
+
     <div id="time-slots" data-time-slots="{{ timeSlotsJson }}"></div>
-    <button type="button" onclick="addTimeSlotNode()">Add timeslot</button>
-    <button type="button" onclick="removeTimeSlotNode()">Remove</button>
+    <div class="button-row">
+        <button type="button" class="button button-small" onclick="addTimeSlotNode()">Add timeslot</button>
+        <button type="button" class="button button-small" onclick="removeTimeSlotNode()">Remove</button>
+    </div>
+
+    <h3 class="m-top">These participants will receive an E-Mail for your poll</h3>
 
     <div id="participant-emails" data-participant-emails="{{ participantEmailsJson }}"></div>
-    <button type="button" onclick="addParticipantNode()">Add Participant</button>
-    <button type="button" onclick="removeParticipantNode()">Remove</button>
+    <div class="button-row">
+        <button type="button" class="button button-small" onclick="addParticipantNode()">Add Participant</button>
+        <button type="button" class="button button-small" onclick="removeParticipantNode()">Remove</button>
+    </div>
 
-	<input type="submit" value="Save" class="button">
+	<input type="submit" value="Go" class="button m-top">
 </form>
     {% endblock %}
