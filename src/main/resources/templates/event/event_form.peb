@@ -22,11 +22,11 @@
         {% if eventForm.description is defined %}{{ eventForm.description }}{% endif %}
     </textarea>
 
-    <div id="time-slots"></div>
+    <div id="time-slots" data-time-slots="{{ timeSlotsJson }}"></div>
     <button type="button" onclick="addTimeSlotNode()">Add timeslot</button>
     <button type="button" onclick="removeTimeSlotNode()">Remove</button>
 
-    <div id="participant-emails"></div>
+    <div id="participant-emails" data-participant-emails="{{ participantEmailsJson }}"></div>
     <button type="button" onclick="addParticipantNode()">Add Participant</button>
     <button type="button" onclick="removeParticipantNode()">Remove</button>
 

@@ -2,22 +2,30 @@ var timeSlotIndex = 0;
 var participantIndex = 0;
 
 function initForm() {
-    let jsonString = document.getElementById('time-slots').dataset.timeslots
-    if (jsonString) {
-        let slotsArr = JSON.parse(jsonString);
-        console.log(slotsArr);
-    }
-
-    // if no previous existing data
-    addTimeSlotNode();
-    addParticipantNode();
+    initTimeSlots();
+    initParticipants();
 }
 
-function addTimeSlotNode() {
+function initTimeSlots() {
+    let jsonString = document.getElementById('time-slots').dataset.timeSlots;
+    if (jsonString) {
+    let slotsArr = JSON.parse(jsonString);
+        if (slotsArr && slotsArr.length > 0) {
+            slotsArr.forEach(slot => {
+                addTimeSlotNode(slot.date, slot.startTime, slot.endTime);
+            })
+            return;
+        }
+    }
+
+    addTimeSlotNode();
+}
+
+function addTimeSlotNode(date = null, startTime = null, endTime = null) {
     let inputs = `
-        <input type="date" name="timeSlots[${timeSlotIndex}].date" placeholder="Pick a date">
-        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" placeholder="Start time">
-        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" placeholder="End time">
+        <input type="date" name="timeSlots[${timeSlotIndex}].date" placeholder="Pick a date" value="${date}">
+        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" placeholder="Start time" value="${startTime}">
+        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" placeholder="End time" value="${endTime}">
     `;
     let node = document.createElement('div')
     node.id = `time-slot-${timeSlotIndex}`;
@@ -32,10 +40,26 @@ function removeTimeSlotNode() {
     timeSlotIndex--;
 }
 
-function addParticipantNode() {
+function initParticipants() {
+    let jsonString = document.getElementById('participant-emails').dataset.participantEmails;
+    if (jsonString) {
+        let participantsArr = JSON.parse(jsonString);
+        if (participantsArr && participantsArr.length > 0) {
+            participantsArr.forEach(participant => {
+                addParticipantNode(participant);
+            })
+            return
+        }
+    }
+
+    addParticipantNode();
+}
+
+function addParticipantNode(email = null) {
     let node = document.createElement('input');
     node.name = `participantEmails[${participantIndex}]`;
     node.placeholder = 'Participant email';
+    node.value = email;
     document.getElementById('participant-emails').appendChild(node)
     participantIndex++;
 }

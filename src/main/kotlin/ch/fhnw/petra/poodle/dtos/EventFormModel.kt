@@ -10,7 +10,6 @@ data class EventFormModel(
     @field:NotBlank(message = "Name is required")
     var name: String = "",
 
-    @field:NotBlank(message = "Description is required")
     var description: String = "",
 
     @field:NotEmpty(message = "At least one time slot must be given")
@@ -19,7 +18,7 @@ data class EventFormModel(
 
     @field:NotEmpty(message = "At least one participant must be given")
     @field:Valid
-    var participants: MutableList<@Email(message = "Each participant must be a valid email address") String> = mutableListOf(),
+    var participantEmails: MutableList<@Email(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}\$\n", message = "Each participant must be a valid email address") String> = mutableListOf(),
 )
 
 data class TimeSlotFormModel(

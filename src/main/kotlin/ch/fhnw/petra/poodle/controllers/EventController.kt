@@ -40,37 +40,41 @@ class EventController(private val eventService: EventService, private val object
                     TemporalHelper.timeStringFromInstant(it.end!!)
                 )
             }.toMutableList(),
-            participants = event.participantEmails
+            participantEmails = event.participantEmails
         )
 
         model.addAttribute("eventForm", form)
         model.addAttribute("eventId", id)
-        //todo: Updating time slots?
+        model.addAttribute("participantEmailsJson", ObjectMapper().writeValueAsString(form.participantEmails))
+        model.addAttribute("timeSlotsJson", ObjectMapper().writeValueAsString(form.timeSlots))
         return "event/event_form"
     }
 
     @PostMapping("/events/save/{id}")
     fun saveEvent(
         @PathVariable id: Int,
-        @Valid @ModelAttribute eventForm: EventFormModel,
+        @Valid @ModelAttribute form: EventFormModel,
         bindingResult: BindingResult,
         model: Model,
     ): String {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("eventForm", eventForm)
+            model.addAttribute("eventForm", form)
+            model.addAttribute("eventId", id)
             model.addAttribute("validationErrors", bindingResult.allErrors)
+            model.addAttribute("participantEmailsJson", ObjectMapper().writeValueAsString(form.participantEmails))
+            model.addAttribute("timeSlotsJson", ObjectMapper().writeValueAsString(form.timeSlots))
             return "event/event_form"
         }
 
         val existingEvent = if (id != 0) eventService.find(id) else Event()
         val updatedEvent = existingEvent.copy(
-            name = eventForm.name,
-            description = eventForm.description,
-            participantEmails = eventForm.participants
+            name = form.name,
+            description = form.description,
+            participantEmails = form.participantEmails
         )
 
         updatedEvent.timeSlots.clear()
-        eventForm.timeSlots.forEach {
+        form.timeSlots.forEach {
             val timeSlot = EventTimeSlot(
                 start = TemporalHelper.instantFromDateTimeString(it.date, it.startTime),
                 end = TemporalHelper.instantFromDateTimeString(it.date, it.endTime),

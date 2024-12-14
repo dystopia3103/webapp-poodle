@@ -62,6 +62,6 @@ class ParticipationController(
             model.addAttribute("validationErrors", bindingResult.allErrors)
             return "participation/participation_form"
         }
-
+        return "redirect" //todo: Redirect to event detail
     }
 }
