@@ -1,11 +1,13 @@
 package ch.fhnw.petra.poodle.controllers
 
-import ch.fhnw.petra.poodle.dtos.EventFormModel
-import ch.fhnw.petra.poodle.dtos.EventTimeSlotViewModel
+import ch.fhnw.petra.poodle.dtos.EventViewModel
 import ch.fhnw.petra.poodle.dtos.ParticipationFormModel
+import ch.fhnw.petra.poodle.entities.Event
+import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.entities.Participation
-import ch.fhnw.petra.poodle.misc.TemporalHelper
+import ch.fhnw.petra.poodle.entities.Vote
 import ch.fhnw.petra.poodle.services.EventService
+import ch.fhnw.petra.poodle.services.EventTimeSlotService
 import ch.fhnw.petra.poodle.services.ParticipationService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -22,31 +24,24 @@ import org.springframework.web.server.ResponseStatusException
 class ParticipationController(
     private val eventService: EventService,
     private val participationService: ParticipationService,
+    private val eventTimeSlotService: EventTimeSlotService,
 ) {
 
-    @GetMapping("/participate/{eventId}")
+    @GetMapping("/participate/{eventLink}")
     fun participate(
-        @PathVariable eventId: Int,
+        @PathVariable eventLink: String,
         model: Model,
     ): String {
-        val event = try {
-            eventService.find(eventId)
-        } catch (e: NoSuchElementException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        }
+        val event = fetchEvent(eventLink)
 
         val participationForm = ParticipationFormModel(
             eventLink = event.link,
         )
+
+        val viewModel = EventViewModel.fromEvent(event)
+
         model.addAttribute("participationForm", participationForm)
-        model.addAttribute("eventName", event.name)
-        model.addAttribute("eventDescription", event.description)
-        model.addAttribute("eventTimeSlots", event.timeSlots.map {
-            EventTimeSlotViewModel(
-                from = TemporalHelper.dateStringFromInstant(it.start!!),
-                to = TemporalHelper.dateStringFromInstant(it.end!!),
-            )
-        })
+        model.addAttribute("event", viewModel)
 
         return "participation/participation_form"
     }
@@ -62,6 +57,37 @@ class ParticipationController(
             model.addAttribute("validationErrors", bindingResult.allErrors)
             return "participation/participation_form"
         }
-        return "redirect" //todo: Redirect to event detail
+
+        val event = fetchEvent(participationForm.eventLink)
+
+        val participation = Participation(
+            participantName = participationForm.participantName,
+        )
+        participationForm.participations.forEach {
+            if (it.timeSlotId != -1) {
+                val timeSlot = fetchTimeSlot(it.timeSlotId)
+                val vote = Vote(timeSlot = timeSlot, participation = participation)
+                participation.votes.add(vote)
+            }
+        }
+        event.participations.add(participation)
+        eventService.save(event)
+        return "redirect:/event/" + event.link
+    }
+
+    private fun fetchEvent(eventLink: String): Event {
+        return try {
+            eventService.find(eventLink)
+        } catch (e: NoSuchElementException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+        }
+    }
+
+    private fun fetchTimeSlot(timeSlotId: Int): EventTimeSlot {
+        return try {
+            eventTimeSlotService.find(timeSlotId)
+        } catch (e: NoSuchElementException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+        }
     }
 }

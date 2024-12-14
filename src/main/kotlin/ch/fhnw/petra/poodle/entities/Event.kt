@@ -22,10 +22,10 @@ data class Event(
     @ElementCollection
     var participantEmails: MutableList<String> = mutableListOf(),
 
-    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @OneToMany(cascade = [CascadeType.ALL])
+    @OrderBy("start ASC")
     var timeSlots: MutableList<EventTimeSlot> = mutableListOf(),
 
     @OneToMany(cascade = [CascadeType.ALL])
     var participations: MutableList<Participation> = mutableListOf(),
-
-    )
+)

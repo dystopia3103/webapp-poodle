@@ -1,6 +1,8 @@
 package ch.fhnw.petra.poodle.controllers
 
 import ch.fhnw.petra.poodle.dtos.EventFormModel
+import ch.fhnw.petra.poodle.dtos.EventViewModel
+import ch.fhnw.petra.poodle.dtos.ParticipationViewModel
 import ch.fhnw.petra.poodle.dtos.TimeSlotFormModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
@@ -8,6 +10,7 @@ import ch.fhnw.petra.poodle.misc.TemporalHelper
 import ch.fhnw.petra.poodle.services.EventService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
@@ -15,9 +18,33 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.server.ResponseStatusException
 
 @Controller
 class EventController(private val eventService: EventService, private val objectMapper: ObjectMapper) {
+
+    @GetMapping("/event/{link}")
+    fun eventDetail(@PathVariable link: String, model: Model): String {
+        val event = try {
+            eventService.find(link)
+        } catch (e: NoSuchElementException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
+        }
+
+        val eventViewModel = EventViewModel.fromEvent(event)
+        val participationViewModels = event.participations.map { participation ->
+            ParticipationViewModel(
+                participantName = participation.participantName,
+                votes = event.timeSlots.map { timeSlot ->
+                    participation.votes.map { vote -> vote.timeSlot?.id }.contains(timeSlot.id)
+                }
+            )
+        }
+
+        model.addAttribute("event", eventViewModel)
+        model.addAttribute("participations", participationViewModels)
+        return "event/event_detail"
+    }
 
     @GetMapping("/events/create")
     fun eventCreateForm(model: Model): String {

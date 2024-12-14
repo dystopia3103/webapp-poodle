@@ -11,6 +11,10 @@ class EventService(private val eventRepo: EventRepository) {
         return eventRepo.findById(id).orElseThrow()
     }
 
+    fun find(link: String): Event {
+        return eventRepo.findByLink(link).orElseThrow()
+    }
+
     fun findAll(): List<Event> {
         return eventRepo.findAll()
     }

@@ -1,18 +1,12 @@
-    {% extends "base" %}
+    {% import 'macros/validation_summary' %}
+        {% extends "base" %}
 
     {% block main %}
 <script src="/js/eventForm.js"></script>
 
 <h2>Plan your event</h2>
 
-{% if validationErrors is defined %}
-    <strong>Please correct the following errors</strong>
-    <ul>
-    {% for error in validationErrors %}
-        <li>{{ error.defaultMessage }}</li>
-    {% endfor %}
-    </ul>
-{% endif %}
+{{ validationSummary(validationErrors) }}
 
 <form action="/events/save/{{ eventId }}" method="post">
 	<input type="text" name="name" placeholder="Title of your event"

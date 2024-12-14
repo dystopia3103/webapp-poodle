@@ -1,5 +1,38 @@
-    {% extends "base" %}
+    {% import 'macros/validation_summary' %}
+        {% extends "base" %}
 
     {% block main %}
-<h2></h2>
+<h2>{{ event.name }}</h2>
+<p>{{ event.description }}</p>
+
+{{ validationSummary(validationErrors) }}
+
+<form action="/participate" method="post">
+	<input type="text" name="participantName" placeholder="Your name"
+        {% if participationForm.participantName is defined %} value="{{ participationForm.participantName }}"{% endif %}></input>
+	<input type="hidden" name="eventLink" value="{{ event.link }}"></input>
+
+    <table>
+        <thead>
+            <tr>
+            {% for timeSlot in event.timeSlots %}
+                <th>{{ timeSlot.from }}</th>
+            {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for timeSlot in event.timeSlots %}
+                    <td>
+                        <input type="checkbox" name="participations[{{ loop.index }}].timeSlotId" value="{{ timeSlot.id }}"
+                            {% if participationForm.participations[loop.index].timeSlotId is defined and participationForm.participations[loop.index].timeSlotId == timeSlot.id %} checked {% endif %}></input>
+                        <input type="hidden" name="participations[{{ loop.index }}].timeSlotId" value="-1"></input>
+                    </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+
+	<input type="submit" value="Save" class="button">
+</form>
     {% endblock %}

@@ -18,5 +18,4 @@ data class ParticipationFormModel(
 
 data class TimeSlotParticipationFormModel(
     var timeSlotId: Int = 0,
-    var isChecked: Boolean = false
 )

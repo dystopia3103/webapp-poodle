@@ -119,3 +119,48 @@ footer p {
     padding: 10px;
   }
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Removes double borders */
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    text-align: left;
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden; /* Ensures the radius applies */
+}
+
+/* Header styling */
+table thead tr {
+    background-color: #f5f5f5; /* Light gray background for headers */
+    border-bottom: 2px solid #ddd;
+}
+
+table th {
+    padding: 12px 15px;
+    font-weight: bold;
+    color: #333; /* Dark text */
+}
+
+/* Body styling */
+table td {
+    padding: 12px 15px;
+    color: #555; /* Slightly lighter text for rows */
+    border-bottom: 1px solid #ddd;
+}
+
+/* Zebra striping for rows */
+table tbody tr:nth-child(odd) {
+    background-color: #fafafa; /* Subtle striping for odd rows */
+}
+
+/* Hover effect */
+table tbody tr:hover {
+    background-color: #f1f1f1; /* Slight highlight on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+/* Optional: Remove last row border */
+table tbody tr:last-child td {
+    border-bottom: none;
+}
