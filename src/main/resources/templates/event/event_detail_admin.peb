@@ -1,6 +1,7 @@
     {% extends "base" %}
 
     {% block main %}
+
 <h2 class="headline m-top">{{ event.name }}</h2>
 <p class="m-top text-center">{{ event.description }}</p>
 
@@ -28,18 +29,29 @@
     </tbody>
 </table>
 
+<div class="center">
+    <h2 class="headline m-top">Participation Link</h2>
+    <p class="text-center m-top" for="link">Link for participants: {{ shareLink }}</p>
+    <button class="button m-top" onclick="navigator.clipboard.writeText('{{ shareLink }}')">Copy to clipboard!</button>
+</div>
+
 {% if bestTimeSlot is defined %}
     <h2 class="headline m-top">Best time slot</h2>
-<table>
-<thead>
-<tr><th>Start</th><th>End</th></tr>
-</thead>
-<tbody>
-<tr>{{ bestTimeSlot.from }}</tr><tr>{{ bestTimeSlot.to }}</tr>
-</tbody>
-</table>
+    <p class="m-top text-center"><strong>{{ bestTimeSlot.from }} - {{ bestTimeSlot.to }}</strong></p>
 {% endif %}
 
+    <h2 class="headline m-top">Finalize Meeting</h2>
+<form action="/finalize/{{ event.link }}" method="post">
 
+    <select id="timeSlot" name="timeSlotId">
+        {% for timeSlot in event.timeSlots %}
+            <option value="{{ timeSlot.id }}"
+                {% if bestTimeSlot is defined and bestTimeSlot.id == timeSlot.id %} selected {% endif %}>
+            {{ timeSlot.from }} - {{ timeSlot.to }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="submit" value="Go" class="button m-top">
+</form>
 
     {% endblock %}

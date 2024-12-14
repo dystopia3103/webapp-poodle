@@ -22,10 +22,13 @@ function initTimeSlots() {
 }
 
 function addTimeSlotNode(date = null, startTime = null, endTime = null) {
+    let dateVal = date == null ? "" : date;
+    let startVal = startTime == null ? "" : startTime;
+    let endVal = endTime == null ? "" : endTime;
     let inputs = `
-        <input type="date" name="timeSlots[${timeSlotIndex}].date" value="${date}">
-        <input type="time" name="timeSlots[${timeSlotIndex}].startTime" value="${startTime}">
-        <input type="time" name="timeSlots[${timeSlotIndex}].endTime" value="${endTime}">
+        <input type="text" name="timeSlots[${timeSlotIndex}].date" value="${dateVal}" pattern="\\d{2}.\\d{2}.\\d{4}" placeholder="dd.mm.yyyy">
+        <input type="text" name="timeSlots[${timeSlotIndex}].startTime" value="${startVal}" pattern="\\d{2}:\\d{2}" placeholder="hh:mm">
+        <input type="text" name="timeSlots[${timeSlotIndex}].endTime" value="${endVal}" pattern="\\d{2}:\\d{2}" placeholder="hh:mm">
     `;
     let node = document.createElement('div')
     node.id = `time-slot-${timeSlotIndex}`;

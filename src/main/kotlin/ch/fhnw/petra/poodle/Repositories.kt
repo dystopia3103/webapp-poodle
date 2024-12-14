@@ -15,7 +15,13 @@ interface ParticipationRepository : JpaRepository<Participation, Int> {
     @Query("SELECT p FROM Participation p JOIN p.event e WHERE e.link = :eventLink")
     fun findByEventLink(@Param("eventLink") eventLink: String): List<Participation>
 }
-interface VoteRepository : JpaRepository<Vote, Int>
-interface MeetingRepository : JpaRepository<Meeting, Int>
 
-//todo: Services
+interface VoteRepository : JpaRepository<Vote, Int>
+interface MeetingRepository : JpaRepository<Meeting, Int> {
+    @Query("SELECT m FROM Meeting m JOIN m.event e WHERE e.link = :eventLink")
+    fun findByEventLink(@Param("eventLink") eventLink: String): Optional<Meeting>
+
+    fun existsByEventLink(link: String): Boolean {
+        return findByEventLink(link).isPresent
+    }
+}

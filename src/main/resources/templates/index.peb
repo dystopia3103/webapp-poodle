@@ -2,7 +2,7 @@
 
     {% block main %}
     <div class="button-container">
-        <h2 class="headline">Start an Event Poll</h2>
+        <h2 class="headline m-bottom">Start an Event Poll</h2>
         <a href="{{ href("/events/create") }}" class="button">Create event</a>
     </div>
 

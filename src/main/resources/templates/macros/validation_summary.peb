@@ -1,10 +1,12 @@
 {% macro validationSummary(validationErrors) %}
     {% if validationErrors is defined %}
-        <strong>Please correct the following errors</strong>
-        <ul>
-        {% for error in validationErrors %}
-            <li>{{ error.defaultMessage }}</li>
-        {% endfor %}
-        </ul>
+        <div class="validation-summary">
+            <strong>Please correct the following errors</strong>
+            <ul>
+            {% for error in validationErrors %}
+                <li>{{ error.defaultMessage }}</li>
+            {% endfor %}
+            </ul>
+        </div>
     {% endif %}
 {% endmacro %}

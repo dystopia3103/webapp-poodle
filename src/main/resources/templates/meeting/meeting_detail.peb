@@ -1,0 +1,7 @@
+    {% extends "base" %}
+
+    {% block main %}
+<h2 class="headline m-top">{{ meeting.event.name }}</h2>
+<p class="m-top text-center">{{ meeting.event.description }}</p>
+<p class="m-top text-center"><strong>Taking place on: {{ meeting.timeSlot.from }}</strong></p>
+    {% endblock %}

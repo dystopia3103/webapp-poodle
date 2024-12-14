@@ -10,19 +10,9 @@ data class Meeting(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int = 0,
 
-    @PrimaryKeyJoinColumn
     @OneToOne(cascade = [CascadeType.ALL])
     var timeSlot: EventTimeSlot? = null,
 
-    @Column(nullable = false)
-    val link: String = UUID.randomUUID().toString(),
-
-    @Column(nullable = false)
-    var name: String = "",
-
-    @Column(nullable = false)
-    var description: String = "",
-
-    @OneToMany(cascade = [CascadeType.ALL])
-    val participations: MutableList<Participation> = mutableListOf()
+    @OneToOne(cascade = [CascadeType.ALL])
+    val event: Event? = null
 )

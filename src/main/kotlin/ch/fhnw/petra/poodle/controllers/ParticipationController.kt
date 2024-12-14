@@ -8,6 +8,7 @@ import ch.fhnw.petra.poodle.entities.Participation
 import ch.fhnw.petra.poodle.entities.Vote
 import ch.fhnw.petra.poodle.services.EventService
 import ch.fhnw.petra.poodle.services.EventTimeSlotService
+import ch.fhnw.petra.poodle.services.MeetingService
 import ch.fhnw.petra.poodle.services.ParticipationService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -25,6 +26,7 @@ class ParticipationController(
     private val eventService: EventService,
     private val participationService: ParticipationService,
     private val eventTimeSlotService: EventTimeSlotService,
+    private val meetingService: MeetingService,
 ) {
 
     @GetMapping("/participate/{eventLink}")
@@ -52,6 +54,10 @@ class ParticipationController(
         bindingResult: BindingResult,
         model: Model,
     ): String {
+        if (meetingService.exists(participationForm.eventLink)) {
+            return "redirect:/meeting/${participationForm.eventLink}"
+        }
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("participationForm", participationForm)
             model.addAttribute("validationErrors", bindingResult.allErrors)

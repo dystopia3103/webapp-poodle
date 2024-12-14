@@ -4,7 +4,9 @@ import ch.fhnw.petra.poodle.dtos.*
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper
+import ch.fhnw.petra.poodle.misc.UrlHelper
 import ch.fhnw.petra.poodle.services.EventService
+import ch.fhnw.petra.poodle.services.MeetingService
 import ch.fhnw.petra.poodle.services.ParticipationService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.Valid
@@ -19,7 +21,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
-class EventController(private val eventService: EventService, private val participationService: ParticipationService) {
+class EventController(
+    private val eventService: EventService,
+    private val participationService: ParticipationService,
+    private val meetingService: MeetingService,
+    private val urlHelper: UrlHelper
+) {
 
     @GetMapping("/event/{link}")
     fun eventDetail(@PathVariable link: String, model: Model): String {
@@ -36,10 +43,16 @@ class EventController(private val eventService: EventService, private val partic
         val viewModel = if (bestSlot == null) null else EventTimeSlotViewModel.fromEventTimeSlot(bestSlot)
         model.addAttribute("bestTimeSlot", viewModel)
 
+        model.addAttribute("shareLink", urlHelper.createUrl("/participate/${link}"))
+
         return eventDetailCommon(link, model, "event/event_detail_admin")
     }
 
     private fun eventDetailCommon(link: String, model: Model, viewName: String): String {
+        if (meetingService.exists(link)) {
+            return "redirect:/meeting/$link"
+        }
+
         val event = try {
             eventService.find(link)
         } catch (e: NoSuchElementException) {
@@ -126,7 +139,7 @@ class EventController(private val eventService: EventService, private val partic
         }
 
         eventService.save(updatedEvent)
-        return "redirect:/event/" + updatedEvent.link
+        return "redirect:/event/admin/" + updatedEvent.link
     }
 
     private fun fetchEvent(eventLink: String): Event {
