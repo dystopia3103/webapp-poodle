@@ -9,12 +9,10 @@ import ch.fhnw.petra.poodle.services.EventTimeSlotService
 import ch.fhnw.petra.poodle.services.MeetingService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
@@ -29,11 +27,7 @@ class MeetingController(
         @PathVariable link: String,
         model: Model,
     ): String {
-        val meeting = try {
-            meetingService.find(link)
-        } catch (e: NoSuchElementException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        }
+        val meeting = meetingService.find(link)
 
         val meetingViewModel = MeetingViewModel(
             name = meeting.event!!.name,
@@ -76,6 +70,12 @@ class MeetingController(
         } catch (e: NoSuchElementException) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, e.message)
         }
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    @ResponseStatus(NOT_FOUND)
+    fun notFound(model: Model): String {
+        return "404"
     }
 
 }

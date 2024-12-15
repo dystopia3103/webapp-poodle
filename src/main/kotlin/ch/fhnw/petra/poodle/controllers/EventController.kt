@@ -15,14 +15,13 @@ import ch.fhnw.petra.poodle.services.ParticipationService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+
 
 @Controller
 class EventController(
@@ -57,11 +56,7 @@ class EventController(
             return "redirect:/meeting/$link"
         }
 
-        val event = try {
-            eventService.find(link)
-        } catch (e: NoSuchElementException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        }
+        val event = eventService.find(link)
 
         val eventViewModel = EventViewModel.fromEvent(event)
         val participationViewModels = event.participations.map { participation ->
@@ -142,7 +137,7 @@ class EventController(
             )
             updatedEvent.timeSlots.add(timeSlot)
         }
-        
+
         eventService.save(updatedEvent)
         return "redirect:/event/admin/" + updatedEvent.link
     }
@@ -158,12 +153,10 @@ class EventController(
         return "redirect:/"
     }
 
-    private fun fetchEvent(eventLink: String): Event {
-        return try {
-            eventService.find(eventLink)
-        } catch (e: NoSuchElementException) {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
-        }
+    @ExceptionHandler(NoSuchElementException::class)
+    @ResponseStatus(NOT_FOUND)
+    fun notFound(model: Model): String {
+        return "404"
     }
 
 }

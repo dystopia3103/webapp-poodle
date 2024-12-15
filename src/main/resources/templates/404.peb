@@ -3,8 +3,7 @@
     {% block main %}
     <div class="center m-top">
         <h2 class="headline m-bottom">Entity was not found!</h2>
-        <p><strong>{{status}}: {{ error }}</strong></p>
-        <p>{{ message }}</p>
+        <a class="button" href="{{ href("/") }}">Go home</a>
     </div>
 
 {% endblock %}

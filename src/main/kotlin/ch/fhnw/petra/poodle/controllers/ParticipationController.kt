@@ -9,27 +9,22 @@ import ch.fhnw.petra.poodle.entities.Vote
 import ch.fhnw.petra.poodle.services.EventService
 import ch.fhnw.petra.poodle.services.EventTimeSlotService
 import ch.fhnw.petra.poodle.services.MeetingService
-import ch.fhnw.petra.poodle.services.ParticipationService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.NOT_FOUND
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @Controller
 class ParticipationController(
     private val eventService: EventService,
-    private val participationService: ParticipationService,
     private val eventTimeSlotService: EventTimeSlotService,
     private val meetingService: MeetingService,
 ) {
 
-    //todo: Global error handling
     //todo: Testing
 
     @GetMapping("/participate/{eventLink}")
@@ -99,5 +94,11 @@ class ParticipationController(
         } catch (e: NoSuchElementException) {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         }
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    @ResponseStatus(NOT_FOUND)
+    fun notFound(model: Model): String {
+        return "404"
     }
 }
