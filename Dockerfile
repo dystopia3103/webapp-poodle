@@ -1,29 +1,30 @@
-# Use an official Maven image with OpenJDK 21
-FROM openjdk:8-jdk-alpine as build
+# Step 1: Use OpenJDK 21 as the base image
+FROM openjdk:21-slim as builder
 
-# Set the working directory
+# Install Maven
+RUN apt-get update && apt-get install -y maven
+
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the pom.xml and install dependencies
-COPY pom.xml .
+# Copy the pom.xml and Kotlin source code
+COPY pom.xml /app/
+COPY src /app/src/
 
-# Copy the rest of the application code
-COPY src /app/src
+# Install dependencies and build the project
+RUN mvn clean install -DskipTests
 
-# Build the application
-RUN mvn clean package -DskipTests
-
-# Use an official OpenJDK runtime as the base image for the runtime container
+# Step 2: Create a minimal runtime image
 FROM openjdk:21-jdk-slim
 
-# Set the working directory for the app
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the built JAR from the build container
-COPY --from=build /app/target/poodle-0.0.1-SNAPSHOT.jar /app/poodle.jar
+# Copy the JAR file from the builder stage to the runtime image
+COPY --from=builder /app/target/poodle-0.0.1-SNAPSHOT.jar /app/poodle.jar
 
-# Expose the port that the Spring Boot app runs on
+# Expose the port the application will run on
 EXPOSE 8080
 
-# Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "poodle.jar"]
+# Command to run the application
+ENTRYPOINT ["java", "-jar", "/app/poodle.jar"]

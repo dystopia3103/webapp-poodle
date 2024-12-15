@@ -105,7 +105,6 @@
 					</args>
 					<compilerPlugins>
 						<plugin>spring</plugin>
-						<plugin>jpa</plugin>
 						<plugin>all-open</plugin>
 					</compilerPlugins>
 				</configuration>
