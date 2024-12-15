@@ -1,5 +1,7 @@
 package ch.fhnw.petra.poodle.controllers
 
+import ch.fhnw.petra.poodle.dtos.viewmodels.EventTimeSlotViewModel
+import ch.fhnw.petra.poodle.dtos.viewmodels.MeetingViewModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.Meeting
 import ch.fhnw.petra.poodle.services.EventService
@@ -33,7 +35,16 @@ class MeetingController(
             throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message)
         }
 
-        model.addAttribute("meeting", meeting)
+        val meetingViewModel = MeetingViewModel(
+            name = meeting.event!!.name,
+            description = meeting.event.description,
+            timeSlot = EventTimeSlotViewModel.fromEventTimeSlot(meeting.timeSlot!!),
+            participants = meeting.event.participations
+                .filter { p -> p.votes.any { v -> v.timeSlot?.id == meeting.timeSlot?.id } }
+                .map { p -> p.participantName })
+
+        model.addAttribute("meeting", meetingViewModel)
+
         return "meeting/meeting_detail"
     }
 

@@ -1,6 +1,10 @@
 package ch.fhnw.petra.poodle.controllers
 
-import ch.fhnw.petra.poodle.dtos.*
+import ch.fhnw.petra.poodle.dtos.formmodels.EventFormModel
+import ch.fhnw.petra.poodle.dtos.formmodels.TimeSlotFormModel
+import ch.fhnw.petra.poodle.dtos.viewmodels.EventTimeSlotViewModel
+import ch.fhnw.petra.poodle.dtos.viewmodels.EventViewModel
+import ch.fhnw.petra.poodle.dtos.viewmodels.ParticipationViewModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper

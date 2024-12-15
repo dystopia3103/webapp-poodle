@@ -1,4 +1,4 @@
-package ch.fhnw.petra.poodle.dtos
+package ch.fhnw.petra.poodle.dtos.formmodels
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank

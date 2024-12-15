@@ -1,4 +1,4 @@
-package ch.fhnw.petra.poodle.dtos
+package ch.fhnw.petra.poodle.dtos.viewmodels
 
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper

@@ -1,7 +1,7 @@
 package ch.fhnw.petra.poodle.controllers
 
-import ch.fhnw.petra.poodle.dtos.EventViewModel
-import ch.fhnw.petra.poodle.dtos.ParticipationFormModel
+import ch.fhnw.petra.poodle.dtos.formmodels.ParticipationFormModel
+import ch.fhnw.petra.poodle.dtos.viewmodels.EventViewModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.entities.Participation
@@ -28,6 +28,9 @@ class ParticipationController(
     private val eventTimeSlotService: EventTimeSlotService,
     private val meetingService: MeetingService,
 ) {
+
+    //todo: Global error handling
+    //todo: Testing
 
     @GetMapping("/participate/{eventLink}")
     fun participate(
