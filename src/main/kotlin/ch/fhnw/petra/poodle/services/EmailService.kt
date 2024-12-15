@@ -1,5 +1,6 @@
 package ch.fhnw.petra.poodle.services
 
+import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.misc.MailTexts
 import ch.fhnw.petra.poodle.misc.MailTexts.Invitation.eventLink
 import ch.fhnw.petra.poodle.misc.MailTexts.Invitation.eventName
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service
 @Service
 class EmailService(private val mailSender: JavaMailSender) {
 
-    fun sendInvitation(participants: List<String>, eventName: String, eventLink: String) {
+    fun sendInvitation(event: Event) {
+        val participants = event.participantEmails
+        val eventName = event.name
+        val eventLink = event.link
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -23,7 +27,10 @@ class EmailService(private val mailSender: JavaMailSender) {
         }
     }
 
-    fun sendReminder(participants: List<String>, eventName: String, eventLink: String) {
+    fun sendReminder(event: Event) {
+        val participants = event.participantEmails
+        val eventName = event.name
+        val eventLink = event.link
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -36,7 +43,11 @@ class EmailService(private val mailSender: JavaMailSender) {
         }
     }
 
-    fun sendMeeting(participants: List<String>, meetingName: String, meetingLink: String) {
+    fun sendMeeting(event: Event) {
+        val participants =
+            event.participations.filter { it.participantEmail != null && it.votes.any() }.map { it.participantEmail!! }
+        val meetingName = event.name
+        val meetingLink = event.link
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {

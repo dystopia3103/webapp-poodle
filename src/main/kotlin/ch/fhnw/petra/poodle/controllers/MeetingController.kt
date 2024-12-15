@@ -67,11 +67,7 @@ class MeetingController(
         meetingService.save(meeting)
 
         // important to send mail to actual participants
-        emailService.sendMeeting(
-            event.participations.filter { it.participantEmail != null && it.votes.any() }.map { it.participantEmail!! },
-            event.name,
-            urlHelper.createUrl("/meeting/" + event.link)
-        )
+        emailService.sendMeeting(event)
 
         return "redirect:/meeting/" + event.link
     }

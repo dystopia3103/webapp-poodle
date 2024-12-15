@@ -143,11 +143,7 @@ class EventController(
 
         eventService.save(updatedEvent)
 
-        emailService.sendInvitation(
-            updatedEvent.participantEmails,
-            updatedEvent.name,
-            urlHelper.createUrl("/participate/" + updatedEvent.link)
-        )
+        emailService.sendInvitation(updatedEvent)
 
         return "redirect:/event/admin/" + updatedEvent.link
     }
@@ -155,11 +151,7 @@ class EventController(
     @GetMapping("/event/send-reminders/{id}")
     fun sendReminders(@PathVariable id: Int): String {
         val event = eventService.find(id)
-        emailService.sendReminder(
-            event.participantEmails,
-            event.name,
-            urlHelper.createUrl("/participate/" + event.link)
-        )
+        emailService.sendReminder(event)
         return "redirect:/event/admin/" + event.link
     }
 
