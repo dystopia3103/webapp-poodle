@@ -15,7 +15,7 @@ class EmailService(private val mailSender: JavaMailSender, private val urlHelper
     fun sendInvitation(event: Event) {
         val participants = event.participantEmails
         val eventName = event.name
-        val eventLink = urlHelper.createUrl("/participate/" + event.link)
+        val eventLink = invitationLink(event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -28,10 +28,14 @@ class EmailService(private val mailSender: JavaMailSender, private val urlHelper
         }
     }
 
+    fun invitationLink(link: String): String {
+        return urlHelper.createUrl("/participate/" + link)
+    }
+
     fun sendReminder(event: Event) {
         val participants = event.participantEmails
         val eventName = event.name
-        val eventLink = urlHelper.createUrl("/participate/" + event.link)
+        val eventLink = reminderLink(event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -44,11 +48,15 @@ class EmailService(private val mailSender: JavaMailSender, private val urlHelper
         }
     }
 
+    fun reminderLink(link: String): String {
+        return invitationLink(link)
+    }
+
     fun sendMeeting(event: Event) {
         val participants =
             event.participations.filter { it.participantEmail != null && it.votes.any() }.map { it.participantEmail!! }
         val meetingName = event.name
-        val meetingLink = urlHelper.createUrl("/meeting/" + event.link)
+        val meetingLink = meetingLink(event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -59,6 +67,10 @@ class EmailService(private val mailSender: JavaMailSender, private val urlHelper
                 )
             }
         }
+    }
+
+    fun meetingLink(link: String): String {
+        return urlHelper.createUrl("/meeting/" + link)
     }
 
     private fun sendEmail(recipient: String, subject: String, htmlContent: String) {
