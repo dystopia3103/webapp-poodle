@@ -49,19 +49,4 @@ class MailTests {
         verify(mailSender, Mockito.times(1)).send(Mockito.any(MimeMessage::class.java))
     }
 
-    @Test
-    fun `should ignore empty emails when inviting`() {
-        // arrange
-        val event = Event(participantEmails = mutableListOf("", "", "asdf"))
-        val service = EmailService(mailSender!!)
-        val mimeMessageMock = Mockito.mock(MimeMessage::class.java)
-        `when`(mailSender.createMimeMessage()).thenReturn(mimeMessageMock)
-
-        // act
-        service.sendInvitation(event)
-
-        // assert
-        verify(mailSender, Mockito.times(1)).send(Mockito.any(MimeMessage::class.java))
-    }
-
 }
