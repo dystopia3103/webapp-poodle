@@ -1,4 +1,4 @@
-package ch.fhnw.petra.poodle
+package ch.fhnw.petra.poodle.unit
 
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.Participation

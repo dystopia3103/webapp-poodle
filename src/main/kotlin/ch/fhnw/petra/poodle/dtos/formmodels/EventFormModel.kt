@@ -23,7 +23,7 @@ data class EventFormModel(
 
 data class TimeSlotFormModel(
     @field:NotBlank(message = "Date is required")
-    @field:Pattern(regexp = "\\d{2}.\\d{2}.\\d{4}", message = "Date must be in the format YYYY-MM-DD")
+    @field:Pattern(regexp = "\\d{2}\\.\\d{2}\\.\\d{4}", message = "Date must be in the format DD.MM.YYYY")
     var date: String = "",
 
     @field:Pattern(regexp = "\\d{2}:\\d{2}", message = "Start time must be in the format HH:MM")
