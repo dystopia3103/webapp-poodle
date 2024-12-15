@@ -4,17 +4,18 @@ import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.misc.MailTexts
 import ch.fhnw.petra.poodle.misc.MailTexts.Invitation.eventLink
 import ch.fhnw.petra.poodle.misc.MailTexts.Invitation.eventName
+import ch.fhnw.petra.poodle.misc.UrlHelper
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
 
 @Service
-class EmailService(private val mailSender: JavaMailSender) {
+class EmailService(private val mailSender: JavaMailSender, private val urlHelper: UrlHelper) {
 
     fun sendInvitation(event: Event) {
         val participants = event.participantEmails
         val eventName = event.name
-        val eventLink = event.link
+        val eventLink = urlHelper.createUrl("/participate/" + event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -30,7 +31,7 @@ class EmailService(private val mailSender: JavaMailSender) {
     fun sendReminder(event: Event) {
         val participants = event.participantEmails
         val eventName = event.name
-        val eventLink = event.link
+        val eventLink = urlHelper.createUrl("/participate/" + event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
@@ -47,7 +48,7 @@ class EmailService(private val mailSender: JavaMailSender) {
         val participants =
             event.participations.filter { it.participantEmail != null && it.votes.any() }.map { it.participantEmail!! }
         val meetingName = event.name
-        val meetingLink = event.link
+        val meetingLink = urlHelper.createUrl("/meeting/" + event.link)
         participants.forEach {
             val recipient = it.trim()
             if (recipient.isNotBlank()) {
