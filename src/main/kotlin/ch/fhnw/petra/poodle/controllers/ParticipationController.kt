@@ -25,8 +25,6 @@ class ParticipationController(
     private val meetingService: MeetingService,
 ) {
 
-    //todo: Testing
-
     @GetMapping("/participate/{eventLink}")
     fun participate(
         @PathVariable eventLink: String,
@@ -66,6 +64,7 @@ class ParticipationController(
 
         val participation = Participation(
             participantName = participationForm.participantName,
+            participantEmail = participationForm.participantEmail,
             event = event,
         )
         participationForm.participations.forEach {

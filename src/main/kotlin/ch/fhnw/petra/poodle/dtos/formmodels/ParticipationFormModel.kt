@@ -1,6 +1,7 @@
 package ch.fhnw.petra.poodle.dtos.formmodels
 
 import jakarta.validation.Valid
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
 
@@ -10,6 +11,11 @@ data class ParticipationFormModel(
 
     @field:NotBlank(message = "Name is required")
     var participantName: String = "",
+
+    // optional
+    @Valid
+    @Email
+    var participantEmail: String? = null,
 
     @field:NotEmpty(message = "At least one time slot must be given")
     @Valid

@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PoodleApplication
 
 fun main(args: Array<String>) {
-	runApplication<PoodleApplication>(*args)
+    runApplication<PoodleApplication>(*args)
 }

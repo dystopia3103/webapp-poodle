@@ -9,6 +9,7 @@ import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.EventTimeSlot
 import ch.fhnw.petra.poodle.misc.TemporalHelper
 import ch.fhnw.petra.poodle.misc.UrlHelper
+import ch.fhnw.petra.poodle.services.EmailService
 import ch.fhnw.petra.poodle.services.EventService
 import ch.fhnw.petra.poodle.services.MeetingService
 import ch.fhnw.petra.poodle.services.ParticipationService
@@ -28,7 +29,8 @@ class EventController(
     private val eventService: EventService,
     private val participationService: ParticipationService,
     private val meetingService: MeetingService,
-    private val urlHelper: UrlHelper
+    private val urlHelper: UrlHelper,
+    private val emailService: EmailService,
 ) {
 
     @GetMapping("/event/{link}")
@@ -74,7 +76,7 @@ class EventController(
         return viewName
     }
 
-    @GetMapping("/events/create")
+    @GetMapping("/event/create")
     fun eventCreateForm(model: Model): String {
         val newEvent = EventFormModel()
         model.addAttribute("eventForm", newEvent)
@@ -82,7 +84,7 @@ class EventController(
         return "event/event_form"
     }
 
-    @GetMapping("/events/update/{id}")
+    @GetMapping("/event/update/{id}")
     fun eventUpdateForm(@PathVariable id: Int, model: Model): String {
         val event = eventService.find(id)
         val form = EventFormModel(
@@ -105,7 +107,7 @@ class EventController(
         return "event/event_form"
     }
 
-    @PostMapping("/events/save/{id}")
+    @PostMapping("/event/save/{id}")
     fun saveEvent(
         @PathVariable id: Int,
         @Valid @ModelAttribute form: EventFormModel,
@@ -140,10 +142,28 @@ class EventController(
         }
 
         eventService.save(updatedEvent)
+
+        emailService.sendInvitation(
+            updatedEvent.participantEmails,
+            updatedEvent.name,
+            urlHelper.createUrl("/participate/" + updatedEvent.link)
+        )
+
         return "redirect:/event/admin/" + updatedEvent.link
     }
 
-    @PostMapping("/events/delete/{id}")
+    @GetMapping("/event/send-reminders/{id}")
+    fun sendReminders(@PathVariable id: Int): String {
+        val event = eventService.find(id)
+        emailService.sendReminder(
+            event.participantEmails,
+            event.name,
+            urlHelper.createUrl("/participate/" + event.link)
+        )
+        return "redirect:/event/admin/" + event.link
+    }
+
+    @PostMapping("/event/delete/{id}")
     fun deleteEvent(
         @PathVariable id: Int,
     ): String {

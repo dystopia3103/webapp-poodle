@@ -8,9 +8,12 @@
 {{ validationSummary(validationErrors) }}
 
 <form action="/participate" method="post">
+	<input type="hidden" name="eventLink" value="{{ event.link }}"></input>
 	<input type="text" name="participantName" placeholder="Your name"
         {% if participationForm.participantName is defined %} value="{{ participationForm.participantName }}"{% endif %}></input>
-	<input type="hidden" name="eventLink" value="{{ event.link }}"></input>
+    <p>If you want to get a notification when the date and time was fixed by the organizer, enter your E-Mail address below:</p>
+	<input type="text" name="participantEmail" placeholder="Optional: Your E-Mail address"
+        {% if participationForm.participantEmail is defined %} value="{{ participationForm.participantEmail }}"{% endif %}></input>
 
     <table>
         <thead>

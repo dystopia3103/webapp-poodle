@@ -4,6 +4,8 @@ import ch.fhnw.petra.poodle.dtos.viewmodels.EventTimeSlotViewModel
 import ch.fhnw.petra.poodle.dtos.viewmodels.MeetingViewModel
 import ch.fhnw.petra.poodle.entities.Event
 import ch.fhnw.petra.poodle.entities.Meeting
+import ch.fhnw.petra.poodle.misc.UrlHelper
+import ch.fhnw.petra.poodle.services.EmailService
 import ch.fhnw.petra.poodle.services.EventService
 import ch.fhnw.petra.poodle.services.EventTimeSlotService
 import ch.fhnw.petra.poodle.services.MeetingService
@@ -20,6 +22,8 @@ class MeetingController(
     private val meetingService: MeetingService,
     private val eventService: EventService,
     private val eventTimeSlotService: EventTimeSlotService,
+    private val emailService: EmailService,
+    private val urlHelper: UrlHelper,
 ) {
 
     @GetMapping("meeting/{link}")
@@ -61,6 +65,14 @@ class MeetingController(
         )
 
         meetingService.save(meeting)
+
+        // important to send mail to actual participants
+        emailService.sendMeeting(
+            event.participations.filter { it.participantEmail != null && it.votes.any() }.map { it.participantEmail!! },
+            event.name,
+            urlHelper.createUrl("/meeting/" + event.link)
+        )
+
         return "redirect:/meeting/" + event.link
     }
 

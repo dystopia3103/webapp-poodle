@@ -8,7 +8,7 @@
 
 {{ validationSummary(validationErrors) }}
 
-<form action="/events/save/{{ eventId }}" method="post">
+<form action="/event/save/{{ eventId }}" method="post">
 	<input type="text" name="name" placeholder="Title of your event"
     {% if eventForm.name is defined %} value="{{ eventForm.name }}"{% endif %}>
 

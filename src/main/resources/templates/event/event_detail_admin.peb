@@ -30,13 +30,19 @@
 </table>
 
 <div class="center">
-    <a href="{{ href("/events/update/" + eventId) }}" class="button m-top">Edit Event</a>
+    <a href="{{ href("/event/update/" + eventId) }}" class="button m-top">Edit Event</a>
 </div>
 
 <div class="center">
     <h2 class="headline m-top">Participation Link</h2>
     <p class="text-center m-top" for="link">Link for participants: {{ shareLink }}</p>
     <button class="button m-top" onclick="navigator.clipboard.writeText('{{ shareLink }}')">Copy to clipboard!</button>
+</div>
+
+<div class="center">
+    <h2 class="headline m-top">Send reminder</h2>
+    <p class="text-center m-top" for="link">Send a reminder E-Mail to participants.</p>
+    <a href="{{ href("/event/send-reminders/" + eventId) }}" class="button m-top">Send E-Mail</a>
 </div>
 
 {% if bestTimeSlot is defined %}
@@ -59,7 +65,7 @@
     <input type="submit" value="Go" class="button m-top">
 </form>
 
-<form action="/events/delete/{{ eventId }}" method="post">
+<form action="/event/delete/{{ eventId }}" method="post">
 <p>Removes your event permanently!</p>
     <input type="submit" value="Delete event" class="button button-danger">
 </form>
