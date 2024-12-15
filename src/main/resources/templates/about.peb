@@ -1,0 +1,25 @@
+    {% extends "base" %}
+
+    {% block main %}
+    <div class="center m-top">
+        <h2 class="headline m-bottom">Poodle</h2>
+        <p>A lightweight and free doodle clone.</p>
+
+        <h3 class="m-top">Features</h3>
+        <ul class="m-top">
+            <li>Create your event.</li>
+            <li>Manage possible time slots and participants.</li>
+            <li>Share the event link with your friends.</li>
+            <li>Participate in the voting.</li>
+            <li>See the results and pick the best time slot for your meeting.</li>
+        </ul>
+
+        <h3 class="m-top">Bonus features</h3>
+        <ul class="m-top">
+            <li>Participants get notified via E-Mail.</li>
+            <li>Send reminders via E-Mail.</li>
+            <li>Once you fix the time-slots, participants will be notified as well.</li>
+        </ul>
+    </div>
+
+{% endblock %}

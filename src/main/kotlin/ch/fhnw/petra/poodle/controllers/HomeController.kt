@@ -20,6 +20,11 @@ class HomeController(private val eventService: EventService) {
         return "index"
     }
 
+    @GetMapping("/about")
+    fun about() : String {
+        return "about"
+    }
+
     @ExceptionHandler(NoSuchElementException::class)
     @ResponseStatus(NOT_FOUND)
     fun notFound(model: Model): String {

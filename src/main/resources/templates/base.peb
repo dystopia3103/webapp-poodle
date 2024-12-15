@@ -5,13 +5,12 @@
 	<link rel="stylesheet" href="{{ href("/styles.css") }}">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{{ href("/") }}">
-                <img id="logo" src="/images/poodle.jpg" alt="Poodle Logo"/>
-            </a>
-        </nav>
-    </header>
+    <nav>
+        <a href="{{ href("/") }}">
+            <img id="logo" src="/images/poodle.jpg" alt="Poodle Logo"/>
+        </a>
+        <a href="{{ href("/about") }}">About</a>
+    </nav>
     <main>
         {% block main %}{% endblock %}
     </main>
