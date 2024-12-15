@@ -176,6 +176,7 @@ table tbody tr:last-child td {
     text-align: center;
     text-decoration: none;
     border-radius: 10px;
+    border: none;
     font-size: 1.5em;
     transition: background-color 0.3s;
 }
@@ -183,6 +184,10 @@ table tbody tr:last-child td {
 .button-small {
     padding: 10px 20px;
     font-size: 1em;
+}
+
+.button-danger {
+    background-color: #f26f66;
 }
 
 .button-row {

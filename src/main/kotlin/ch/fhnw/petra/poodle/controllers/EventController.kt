@@ -73,6 +73,7 @@ class EventController(
             )
         }
 
+        model.addAttribute("eventId", event.id)
         model.addAttribute("event", eventViewModel)
         model.addAttribute("participations", participationViewModels)
         return viewName
@@ -129,10 +130,10 @@ class EventController(
         val updatedEvent = existingEvent.copy(
             name = form.name,
             description = form.description,
-            participantEmails = form.participantEmails
+            participantEmails = form.participantEmails // set participant emails to new list
         )
 
-        updatedEvent.timeSlots.clear()
+        updatedEvent.timeSlots.clear() // make sure to remove old time slots
         form.timeSlots.forEach {
             val timeSlot = EventTimeSlot(
                 start = TemporalHelper.instantFromDateTimeString(it.date, it.startTime),
@@ -141,9 +142,20 @@ class EventController(
             )
             updatedEvent.timeSlots.add(timeSlot)
         }
-
+        
         eventService.save(updatedEvent)
         return "redirect:/event/admin/" + updatedEvent.link
+    }
+
+    @PostMapping("/events/delete/{id}")
+    fun deleteEvent(
+        @PathVariable id: Int,
+    ): String {
+        if (!eventService.exists(id)) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Event does not exist")
+        }
+        eventService.delete(id)
+        return "redirect:/"
     }
 
     private fun fetchEvent(eventLink: String): Event {

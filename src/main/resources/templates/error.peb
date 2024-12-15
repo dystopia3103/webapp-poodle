@@ -1,0 +1,10 @@
+    {% extends "base" %}
+
+    {% block main %}
+    <div class="center m-top">
+        <h2 class="headline m-bottom">Something went wrong...</h2>
+        <p><strong>{{status}}: {{ error }}</strong></p>
+        <p>{{ message }}</p>
+    </div>
+
+{% endblock %}

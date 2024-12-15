@@ -23,4 +23,12 @@ class EventService(private val eventRepo: EventRepository) {
         eventRepo.save(event)
     }
 
+    fun delete(id: Int) {
+        eventRepo.deleteById(id)
+    }
+
+    fun exists(id: Int): Boolean {
+        return eventRepo.existsById(id)
+    }
+
 }
