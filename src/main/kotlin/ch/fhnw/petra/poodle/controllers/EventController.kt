@@ -123,9 +123,10 @@ class EventController(
 
         val existingEvent = if (id != 0) eventService.find(id) else Event()
         val updatedEvent = existingEvent.copy(
-            name = form.name,
-            description = form.description,
-            participantEmails = form.participantEmails // set participant emails to new list
+            name = form.name.trim(),
+            description = form.description.trim(),
+            participantEmails = form.participantEmails.map { it.trim().ifBlank { null } }.filterNotNull()
+                .toMutableList() // set participant emails to new list
         )
 
         updatedEvent.timeSlots.clear() // make sure to remove old time slots

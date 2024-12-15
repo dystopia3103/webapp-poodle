@@ -44,8 +44,9 @@
     <p class="m-top text-center"><strong>{{ bestTimeSlot.from }} - {{ bestTimeSlot.to }}</strong></p>
 {% endif %}
 
-    <h2 class="headline m-top">Finalize Meeting</h2>
 <form action="/finalize/{{ event.link }}" method="post">
+    <h2 class="headline m-top">Finalize Meeting</h2>
+    <p class="text-center">Pick the time slot where the meeting will take place! Careful, you can not reverse this!</p>
 
     <select id="timeSlot" name="timeSlotId">
         {% for timeSlot in event.timeSlots %}
